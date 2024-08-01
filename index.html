@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Envoyer un message Telegram</title>
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: #f2aa4c;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: #f27405;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #f2aa4c;
+      background-color: #2a2a2a;
+      color: #f2aa4c;
+    }
+
+    button {
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      background-color: #f27405;
+      color: #1a1a1a;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Envoyer un message Telegram</h1>
+  <form id="telegramForm">
+    <label for="identification">Email ou numéro de téléphone :</label>
+    <input type="text" id="identification" required>
+
+    <label for="message">Message :</label>
+    <textarea id="message" rows="4" required></textarea>
+
+    <button type="submit">Envoyer</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('telegramForm');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const identification = document.getElementById('identification').value;
+      const message = document.getElementById('message').value;
+
+      // **Important :**  Remplacez '7177403062:AAHckiwt7xq1lC0A-J-nPW4ITHsNDsIG2vw' par le token de votre bot Telegram
+      const telegramApiUrl = `https://api.telegram.org/botVOTRE_TOKEN_TELEGRAM/sendMessage`; 
+
+      // **Attention :** Vous devez trouver un moyen fiable d'identifier l'utilisateur Telegram 
+      // à partir de l'email ou du numéro de téléphone. 
+      // **Ce code est incomplet et ne fonctionnera pas sans une identification correcte.**
+      const chatId = '6994578596'; 
+
+      const data = {
+        chat_id: chatId,
+        text: `Message de : ${identification}\n\n${message}`
+      };
+
+      fetch(telegramApiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.ok) {
+          alert('Message envoyé avec succès !');
+          form.reset(); 
+        } else {
+          alert('Erreur lors de l'envoi du message.');
+        }
+      })
+      .catch(error => console.error('Erreur :', error));
+    });
+  </script>
+</body>
+</html>
